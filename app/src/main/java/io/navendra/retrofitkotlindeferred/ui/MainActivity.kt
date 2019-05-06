@@ -1,16 +1,14 @@
 package io.navendra.retrofitkotlindeferred.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.squareup.picasso.Picasso
 import io.navendra.retrofitkotlindeferred.R
 import io.navendra.retrofitkotlindeferred.service.ApiFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,11 +16,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val service = ApiFactory.placeholderApi
+        // val service = ApiFactory.placeholderApi
 
         val movieService = ApiFactory.tmdbApi
 
-
+        /*
         //Getting Posts from Jsonplaceholder API
         GlobalScope.launch(Dispatchers.Main) {
             val postRequest = service.getPosts()
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     Log.d("MainActivity ",response.errorBody().toString())
                 }
-                
+
             }catch (e: Exception){
 
             }
@@ -74,22 +72,32 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
+        */
 
         GlobalScope.launch(Dispatchers.Main) {
+            Log.d("MainActivityResult", "Testing from couroutines!")
             val popularMovieRequest = movieService.getPopularMovie()
             try {
+                Log.d("MainActivityResult", "Testing from try block!")
                 val response = popularMovieRequest.await()
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
+                    toast("Data Get!")
+                    Log.d("MainActivityResult", "Data Get!")
                     val movieResponse = response.body() //This is single object Tmdb Movie response
                     val popularMovies = movieResponse?.results // This is list of TMDB Movie
-                }else{
-                    Log.d("MainActivity ",response.errorBody().toString())
+                    popularMovies?.let {
+                        for (movie in popularMovies) {
+                            Log.d("MainActivityResult", "Movie Name: ${movie.title}")
+                        }
+                    }
+                } else {
+                    Log.d("MainActivity", response.errorBody().toString())
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
 
             }
         }
 
+        Log.d("MainActivityResult", "Testing!")
     }
 }
