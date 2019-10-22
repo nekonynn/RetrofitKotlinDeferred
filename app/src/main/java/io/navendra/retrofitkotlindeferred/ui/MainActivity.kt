@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                     val popularMovies = movieResponse?.results // This is list of TMDB Movie
                     popularMovies?.let {
                         for (movie in popularMovies) {
-                            Log.d("MainActivityResult", "Movie Name: ${movie.title}")
+                            Log.d("MainActivityResult", "Movie Name: ${movie.title}, Original Movie Name: ${movie.original_title}")
                         }
                     }
                 } else {
